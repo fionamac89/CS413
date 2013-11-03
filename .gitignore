@@ -4,3 +4,11 @@
 *.jar
 *.war
 *.ear
+
+# Open Files #
+*~
+
+# Eclipse Files #
+/bin
+.classpath
+.project
