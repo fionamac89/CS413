@@ -25,7 +25,6 @@ public class StartScreen extends JFrame {
 		panel.add(new JButton("Simon Says"));
 		panel.add(new JButton("SmartPhone Controlled"));
 		add(panel);
-
 	}
 
 }
