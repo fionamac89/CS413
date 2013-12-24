@@ -1,4 +1,4 @@
-package arduinoCommsPrototype;
+package test;
 
 import gnu.io.CommPort;
 import gnu.io.CommPortIdentifier;

@@ -1,4 +1,4 @@
-package modes;
+package games;
 
 public interface GameMode {
 

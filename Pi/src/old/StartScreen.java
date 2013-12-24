@@ -1,10 +1,12 @@
 package gui;
 
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import controller.ButtonListener;
 
 public class StartScreen extends JFrame {
 
@@ -21,9 +23,10 @@ public class StartScreen extends JFrame {
 	private void init() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(3, 1));
-		panel.add(new JButton("Random"));
-		panel.add(new JButton("Simon Says"));
-		panel.add(new JButton("SmartPhone Controlled"));
+		ActionListener al = new ButtonListener();
+		panel.add(new ESButton("Random", al));
+		panel.add(new ESButton("Simon Says", al));
+		panel.add(new ESButton("SmartPhone Controlled", al));
 		add(panel);
 	}
 
