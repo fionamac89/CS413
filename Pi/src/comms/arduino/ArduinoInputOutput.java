@@ -1,5 +1,6 @@
 package comms.arduino;
 
+import java.util.Observable;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -7,7 +8,7 @@ import comms.model.Command;
 import comms.model.Data;
 import comms.model.Response;
 
-public class ArduinoInputOutput {
+public class ArduinoInputOutput extends Observable {
 
 	private Queue<Response> inputBuffer;
 	private Queue<Command> outputBuffer;
@@ -15,11 +16,12 @@ public class ArduinoInputOutput {
 	public ArduinoInputOutput() {
 		inputBuffer = new LinkedBlockingQueue<Response>();
 		outputBuffer = new LinkedBlockingQueue<Command>();
-		new InputProcessorThread().start();
 	}
 
 	public void sendCommand(Command c) {
+		// TODO Send this using the Xbee Modules
 		outputBuffer.offer(c);
+		new InputProcessorThread().start();
 	}
 
 	public Response getResponse() {
@@ -37,20 +39,15 @@ public class ArduinoInputOutput {
 		@Override
 		public void run() {
 			super.run();
-			// TODO Get Data From Arduino
-			while (true) {
-				try {
-
-					Command outputCommand = outputBuffer.poll();
-					if (outputCommand != null) {
-						Thread.sleep(2000);
-						inputBuffer.offer(new Data(outputCommand));
-					}
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-
+			// TODO Get Data From Arduino using the Xbee modules
+			Command outputCommand = outputBuffer.poll();
+			if (outputCommand != null) {
+				inputBuffer.offer(new Data(outputCommand.getPadNo(), new Long(
+						10l)));
+				setChanged();
+				notifyObservers();
 			}
+
 		}
 	}
 }

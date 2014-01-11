@@ -1,3 +1,4 @@
+import games.Game;
 import games.RandomMode;
 
 import comms.arduino.ArduinoInputOutput;
@@ -12,7 +13,7 @@ public class Run {
 
 		// StartScreen start = new StartScreen();
 		// start.setVisible(true);
-		new RandomMode(5, new ArduinoInputOutput()).playGame();
+		Game g = new RandomMode(5, new ArduinoInputOutput());
+		g.playGame();
 	}
-
 }

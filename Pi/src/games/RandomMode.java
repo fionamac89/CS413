@@ -5,48 +5,31 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import comms.arduino.ArduinoInputOutput;
 import comms.model.Data;
-import comms.model.Response;
 
-public class RandomMode implements GameMode {
-
-	private int noOfPads;
-	private ArduinoInputOutput arduinoInput;
-	private AtomicInteger score;
+public class RandomMode extends GameMode {
 
 	public RandomMode(int noOfPads, ArduinoInputOutput ip) {
-		this.noOfPads = noOfPads;
-		this.arduinoInput = ip;
-		score = new AtomicInteger();
+		super(noOfPads, ip);
+		arduinoInput.addObserver(this);
 	}
 
-	public int playGame() throws InterruptedException {
+	public int playGame() {
 		AtomicInteger score = new AtomicInteger();
-		double secondsBetweenSignals = 5;
+		double secondsBetweenSignals = 1;
 		Random random = new Random();
 		boolean playing = true;
-		new ScoreResponses().start();
 		while (playing) {
+			// TODO look at ensuring that only lights that are off are used
+			// TODO Max running time
 			arduinoInput.sendCommand(new Data(random.nextInt(noOfPads)));
 			secondsBetweenSignals = secondsBetweenSignals * 0.9;
-			Thread.sleep((long) (secondsBetweenSignals * 1000));
+			try {
+				Thread.sleep((long) (secondsBetweenSignals * 1000));
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 		return score.get();
 	}
 
-	private class ScoreResponses extends Thread {
-
-		@Override
-		public void run() {
-			super.run();
-			while (true) {
-				Response currentResponse;
-				if ((currentResponse = arduinoInput.getResponse()) != null) {
-					System.out.println("Score:\t"
-							+ score.addAndGet(currentResponse.getScore()));
-				}
-
-			}
-
-		}
-	}
 }

@@ -1,8 +1,6 @@
 package comms.model;
 
+public interface Command {
 
-public interface Command extends IData {
-
-	public String toCommandString();
-
+	public int getPadNo();
 }

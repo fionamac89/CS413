@@ -1,30 +1,18 @@
 package comms.model;
 
-import java.util.Date;
-
-import util.TimeUtil;
-
-
 public class Data implements Command, Response {
 
-	private static int idCounter;
-	private final int id, padNo;
-	private final Date sendTime, responseTime;
+	private final int padNo;
+	private final Long responseTime;
 
 	public Data(int padNo) {
-		this.id = idCounter;
-		idCounter++;
 		this.padNo = padNo;
-		this.sendTime = TimeUtil.getCurrentTime();
 		this.responseTime = null;
 	}
 
-	public Data(Command c) {
-		this.id = c.getId();
-		this.padNo = c.getPadNo();
-		this.sendTime = c.getSendTime();
-		this.responseTime = TimeUtil.getCurrentTime();
-
+	public Data(int padNo, Long responseTime) {
+		this.padNo = padNo;
+		this.responseTime = responseTime;
 	}
 
 	/*
@@ -40,52 +28,16 @@ public class Data implements Command, Response {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see comms.arduino.Command#getSendTime()
+	 * @see comms.arduino.Response#getResponseTime()
 	 */
 	@Override
-	public Date getSendTime() {
-		return sendTime;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see comms.arduino.Command#getId()
-	 */
-	@Override
-	public int getId() {
-		return id;
-	}
-
-	@Override
-	public Date getResponseTime() {
+	public Long getResponseTime() {
 		return responseTime;
 	}
 
 	@Override
-	public int getScore() {
-		Long diff = responseTime.getTime() - sendTime.getTime();
-		System.out.println("RT:\t" + responseTime.getTime() + " ST:\t"
-				+ sendTime.getTime() + " Diff:\t" + diff);
-		return diff.intValue();
-	}
+	public String toString() {
+		return "PadNo: " + padNo + " RT: " + responseTime;
 
-	@Override
-	public String toCommandString() {
-		return id + ", " + padNo + ", " + TimeUtil.getStringFromDate(sendTime);
-	}
-
-	@Override
-	public String toResponseString() {
-		return toCommandString() + ", "
-				+ TimeUtil.getStringFromDate(responseTime);
-	}
-
-	public static Command getCommandFromString(String command) {
-		return null;
-	}
-
-	public static Response getResponeFromString(String response) {
-		return null;
 	}
 }
