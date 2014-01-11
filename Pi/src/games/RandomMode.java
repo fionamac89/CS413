@@ -1,7 +1,7 @@
 package games;
 
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import comms.arduino.ArduinoInputOutput;
 import comms.model.Data;
@@ -13,8 +13,8 @@ public class RandomMode extends GameMode {
 		arduinoInput.addObserver(this);
 	}
 
-	public int playGame() {
-		AtomicInteger score = new AtomicInteger();
+	public long playGame() {
+		score = new AtomicLong();
 		double secondsBetweenSignals = 1;
 		Random random = new Random();
 		boolean playing = true;

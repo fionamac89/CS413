@@ -16,12 +16,14 @@ public class ArduinoInputOutput extends Observable {
 	public ArduinoInputOutput() {
 		inputBuffer = new LinkedBlockingQueue<Response>();
 		outputBuffer = new LinkedBlockingQueue<Command>();
+
+		new InputProcessorThread().start();
 	}
 
 	public void sendCommand(Command c) {
 		// TODO Send this using the Xbee Modules
 		outputBuffer.offer(c);
-		new InputProcessorThread().start();
+		// new InputProcessorThread().start();
 	}
 
 	public Response getResponse() {
@@ -40,12 +42,15 @@ public class ArduinoInputOutput extends Observable {
 		public void run() {
 			super.run();
 			// TODO Get Data From Arduino using the Xbee modules
-			Command outputCommand = outputBuffer.poll();
-			if (outputCommand != null) {
-				inputBuffer.offer(new Data(outputCommand.getPadNo(), new Long(
-						10l)));
-				setChanged();
-				notifyObservers();
+
+			while (true) {
+				Command outputCommand = outputBuffer.poll();
+				if (outputCommand != null) {
+					inputBuffer.offer(new Data(outputCommand.getPadNo(),
+							new Long(10l)));
+					setChanged();
+					notifyObservers();
+				}
 			}
 
 		}
