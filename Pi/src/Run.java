@@ -1,14 +1,10 @@
-import games.RemoteGame;
-
-import comms.arduino.ArduinoInputOutput;
-
 public class Run {
 
 	/**
 	 * @param args
-	 * @throws InterruptedException
+	 * @throws Exception
 	 */
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) throws Exception {
 
 		// StartScreen start = new StartScreen();
 		// start.setVisible(true);
@@ -17,7 +13,14 @@ public class Run {
 
 		// SimonSaysMode g = new SimonSaysMode(5, new ArduinoInputOutput());
 		// g.startRound();
-		RemoteGame r = new RemoteGame(5, new ArduinoInputOutput());
-		r.playGame();
+		// RemoteGame r = new RemoteGame(5, new ArduinoInputOutput());
+		// r.playGame();
+
+		SerialOut so = new SerialOut("/dev/ttyS99");
+		while (true) {
+			so.sendString("1");
+			Thread.sleep(2000);
+		}
+
 	}
 }
