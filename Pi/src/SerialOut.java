@@ -10,9 +10,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.Observable;
 import java.util.TooManyListenersException;
 
-public class SerialOut {
+public class SerialOut extends Observable {
 
 	private InputStream in;
 	private BufferedWriter bw;
@@ -43,9 +44,6 @@ public class SerialOut {
 				bw = new BufferedWriter(new OutputStreamWriter(out));
 
 				new Thread(new SerialReader(in)).start();
-				// serialPort.addEventListener(new
-				// SerialReaderEventListener(in));
-				// serialPort.notifyOnDataAvailable(true);
 			}
 		}
 	}

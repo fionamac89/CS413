@@ -3,14 +3,14 @@ package comms.model;
 public class Data implements Command, Response {
 
 	private final int padNo;
-	private final Long responseTime;
+	private final int responseTime;
 
 	public Data(int padNo) {
 		this.padNo = padNo;
-		this.responseTime = null;
+		this.responseTime = 0;
 	}
 
-	public Data(int padNo, Long responseTime) {
+	public Data(int padNo, int responseTime) {
 		this.padNo = padNo;
 		this.responseTime = responseTime;
 	}
@@ -31,7 +31,7 @@ public class Data implements Command, Response {
 	 * @see comms.arduino.Response#getResponseTime()
 	 */
 	@Override
-	public Long getResponseTime() {
+	public int getResponseTime() {
 		return responseTime;
 	}
 

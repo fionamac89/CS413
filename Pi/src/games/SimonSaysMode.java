@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Random;
 
-import comms.arduino.ArduinoInputOutput;
+import comms.arduino.ArduinoSerialIO;
 import comms.model.Data;
 import comms.model.Response;
 
@@ -15,7 +15,7 @@ public class SimonSaysMode extends GameMode {
 	private List<Integer> recived;
 	private int roundNo = 0;
 
-	public SimonSaysMode(int noOfPads, ArduinoInputOutput arduinoInput) {
+	public SimonSaysMode(int noOfPads, ArduinoSerialIO arduinoInput) {
 		super(noOfPads, arduinoInput);
 	}
 
@@ -32,7 +32,7 @@ public class SimonSaysMode extends GameMode {
 		for (int i = 0; i <= roundNo; i++) {
 			sent.add(random.nextInt(noOfPads));
 		}
-		System.out.println("Sent:\t" + sent);
+		// System.out.println("Sent:\t" + sent);
 
 		for (Integer i : sent) {
 			arduinoInput.sendCommand(new Data(i));

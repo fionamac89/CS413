@@ -3,19 +3,19 @@ package games;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 
-import comms.arduino.ArduinoInputOutput;
+import comms.arduino.ArduinoSerialIO;
 import comms.model.Data;
 
 public class RandomMode extends GameMode {
 
-	public RandomMode(int noOfPads, ArduinoInputOutput ip) {
+	public RandomMode(int noOfPads, ArduinoSerialIO ip) {
 		super(noOfPads, ip);
 		arduinoInput.addObserver(this);
 	}
 
 	public long playGame() {
 		score = new AtomicLong();
-		double secondsBetweenSignals = 1;
+		double secondsBetweenSignals = 10;
 		Random random = new Random();
 		boolean playing = true;
 		while (playing) {

@@ -7,12 +7,12 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import comms.arduino.ArduinoInputOutput;
+import comms.arduino.ArduinoSerialIO;
 import comms.model.Data;
 
 public class RemoteGame extends GameMode {
 
-	public RemoteGame(int noOfPads, ArduinoInputOutput arduinoInput) {
+	public RemoteGame(int noOfPads, ArduinoSerialIO arduinoInput) {
 		super(noOfPads, arduinoInput);
 	}
 
