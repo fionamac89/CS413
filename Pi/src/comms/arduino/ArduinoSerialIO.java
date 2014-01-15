@@ -18,6 +18,7 @@ import java.util.TooManyListenersException;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import comms.model.Command;
+import comms.model.Config;
 import comms.model.Data;
 import comms.model.Response;
 
@@ -90,13 +91,21 @@ public class ArduinoSerialIO extends Observable implements ArduinoIO {
 		}
 	}
 
-	public void sendConfig() {
+	public void sendConfig(Config c) {
+		try {
+			System.out.println("Send config:\t" + c.getCommand());
+			bw.write(c.getCommand());
+			bw.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 	}
 
 	public void init() {
 		try {
-			bw.write('1');
+			System.out.println("Init:\tz");
+			bw.write('z');
 			bw.flush();
 		} catch (IOException e) {
 			e.printStackTrace();

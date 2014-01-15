@@ -20,19 +20,6 @@ public abstract class GameMode extends Observable implements Game {
 	}
 
 	@Override
-	public void update(Observable o, Object arg) {
-		Response currentResponse;
-		// System.out.println("Response Reterived");
-		if ((currentResponse = arduinoInput.getResponse()) != null) {
-			score.increaseResponseTimes(currentResponse.getResponseTime());
-			score.increaseTotalPulse();
-			System.out.println("Score Changed");
-			setChanged();
-			notifyObservers();
-		}
-	}
-
-	@Override
 	public Score playGame() {
 		score = new Score();
 		// Sending null to init the socket
@@ -43,6 +30,19 @@ public abstract class GameMode extends Observable implements Game {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		Response currentResponse;
+		// System.out.println("Response Reterived");
+		if ((currentResponse = arduinoInput.getResponse()) != null) {
+			score.increaseResponseTimes(currentResponse.getResponseTime());
+			score.increaseTotalPulse();
+			System.out.println("Score Changed");
+			setChanged();
+			notifyObservers();
+		}
 	}
 
 	public Score getScore() {
