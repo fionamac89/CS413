@@ -4,6 +4,7 @@ import java.util.Random;
 
 import comms.arduino.ArduinoSerialIO;
 import comms.model.Data;
+import comms.model.Score;
 
 public class RandomMode extends GameMode {
 
@@ -12,7 +13,7 @@ public class RandomMode extends GameMode {
 		arduinoInput.addObserver(this);
 	}
 
-	public long playGame() {
+	public Score playGame() {
 		super.playGame();
 		double secondsBetweenSignals = 5;
 		Random random = new Random();
@@ -26,13 +27,12 @@ public class RandomMode extends GameMode {
 			arduinoInput.sendCommand(new Data(printme));
 			System.out.println("Sent: " + printme);
 			secondsBetweenSignals = secondsBetweenSignals * 0.9;
-			System.out.println("Seconds Between:\t" + secondsBetweenSignals);
 			try {
 				Thread.sleep((long) (secondsBetweenSignals * 1000));
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
-		return score.get();
+		return score;
 	}
 }

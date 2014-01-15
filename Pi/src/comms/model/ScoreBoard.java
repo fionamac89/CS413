@@ -5,18 +5,16 @@ import java.util.List;
 
 public class ScoreBoard {
 
-	private List<String> names;
-	private List<Long> scores;
+	private List<Score> scores;
 
 	public ScoreBoard() {
 		// TODO Display Scores Somewhere (Maybe from menu)
-		names = new ArrayList<String>();
-		scores = new ArrayList<Long>();
+		scores = new ArrayList<Score>();
 
 	}
 
-	public void addScoreName(String name, long score) {
-		names.add(name);
+	public void addScoreName(String name, Score score) {
+		score.setName(name);
 		scores.add(score);
 	}
 

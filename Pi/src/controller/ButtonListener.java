@@ -21,12 +21,11 @@ public class ButtonListener implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
 		g.newGame(e.getActionCommand());
 		new GameFrame(g);
-		long l = g.getMode().playGame();
+		// long l = g.getMode().playGame();
 		// TODO Inpout user name
-		g.getScoreBoard().addScoreName("Test", l);
+		// g.getScoreBoard().addScoreName("Test", l);
 	}
 
 }

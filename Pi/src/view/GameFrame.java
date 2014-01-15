@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import comms.model.GameManager;
+import comms.model.Score;
 
 public class GameFrame extends JFrame {
 
@@ -40,7 +41,17 @@ public class GameFrame extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			g.getMode().playGame();
+			// change to swap button with a stop button
+			new Thread(new GameRunner()).start();
+		}
+	}
+
+	private class GameRunner implements Runnable {
+
+		@Override
+		public void run() {
+			Score s = g.getMode().playGame();
+			g.getScoreBoard().addScoreName("Test", s);
 		}
 
 	}

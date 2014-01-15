@@ -8,6 +8,7 @@ import java.util.Random;
 import comms.arduino.ArduinoSerialIO;
 import comms.model.Data;
 import comms.model.Response;
+import comms.model.Score;
 
 public class SimonSaysMode extends GameMode {
 
@@ -20,10 +21,10 @@ public class SimonSaysMode extends GameMode {
 	}
 
 	@Override
-	public long playGame() {
+	public Score playGame() {
 		super.playGame();
 		startRound();
-		return score.get();
+		return score;
 	}
 
 	public void startRound() {
@@ -55,12 +56,11 @@ public class SimonSaysMode extends GameMode {
 
 				}
 				if (matching) {
-					score.addAndGet((long) sent.size());
+					score.increaseResponseTimes((long) sent.size());
 					try {
 						// TODO Fix this thread, maybe flag a notification
 						Thread.sleep(1000);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					startRound();
