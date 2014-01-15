@@ -54,7 +54,6 @@ public class RandomMode extends GameMode {
 			try {
 				Thread.sleep(200);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			nextFlash();
@@ -62,7 +61,6 @@ public class RandomMode extends GameMode {
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			arduinoInput.sendConfig(new Config().appendChar('q'));

@@ -30,7 +30,6 @@ public class SimonSaysMode extends GameMode {
 		try {
 			Thread.sleep(500);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		startRound();
@@ -47,14 +46,12 @@ public class SimonSaysMode extends GameMode {
 		try {
 			Thread.sleep(500);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		for (Integer i : sent) {
 			try {
 				Thread.sleep(800);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			arduinoInput.sendCommand(new Data(i));
@@ -63,7 +60,6 @@ public class SimonSaysMode extends GameMode {
 		try {
 			Thread.sleep(500);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
