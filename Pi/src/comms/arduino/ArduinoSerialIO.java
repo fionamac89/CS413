@@ -130,7 +130,7 @@ public class ArduinoSerialIO extends Observable implements ArduinoIO {
 						c = (char) in.read();
 						s += c;
 					}
-					System.out.println("Signal Recived:/t" + s);
+					System.out.println("Signal Recived:\t" + s);
 					if (s.length() > 0 && s.contains(", ")) {
 						String[] data = s.replace("\n", "").split(", ");
 						inputBuffer.add(new Data(Integer.parseInt(data[0]),

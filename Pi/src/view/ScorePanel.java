@@ -38,6 +38,6 @@ public class ScorePanel extends JPanel implements Observer {
 				+ game.getScore().getAverageResponseTime());
 		totalResponseTime.setText("Total Response Time:\t"
 				+ game.getScore().getSumOfResponses());
-		System.out.println("Score Updated");
+		// System.out.println("Score Updated");
 	}
 }

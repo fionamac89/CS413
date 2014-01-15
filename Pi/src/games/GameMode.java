@@ -22,7 +22,7 @@ public abstract class GameMode extends Observable implements Game {
 	@Override
 	public void update(Observable o, Object arg) {
 		Response currentResponse;
-		System.out.println("Response Reterived");
+		// System.out.println("Response Reterived");
 		if ((currentResponse = arduinoInput.getResponse()) != null) {
 			score.increaseResponseTimes(currentResponse.getResponseTime());
 			score.increaseTotalPulse();
