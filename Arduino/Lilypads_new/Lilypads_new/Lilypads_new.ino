@@ -25,7 +25,7 @@ const unsigned long add_time = 500UL;  //add another 0.5 sec
 #define DOWN HIGH      // The button is pressed down
 #define UP LOW         // The button is leased
 #define ROUND 5        //Rounds of game
-#define BRIGHT 0x05
+#define BRIGHT 0x20
 
 // Define game modes
 enum games{
@@ -90,7 +90,7 @@ void loop() {
         Serial.print('\n');
       if(input == 'd'){
         now_mode = rand_g;
-        silence();
+        startGame();
       }else if(input == 's'){
         now_mode = simon_g;
         silence();
@@ -120,6 +120,7 @@ void loop() {
       }else if(input == 'q'){
         // Quit the game mode
         Serial.print("Quit Game. \n");
+        wonGame();
         now_mode = ready_g;
       }else if(input == 's'){
         now_mode = simon_g;
@@ -200,8 +201,7 @@ void loop() {
       }else if(input == 'd'){
         Serial.print("To Random Game \n");
         now_mode = rand_g;
-        silence();
-        loadWS2803();
+        startGame();
         break;
       }else if(input >= '0' && input <= '3'){
         input = input - '0';
