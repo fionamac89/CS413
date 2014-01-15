@@ -40,7 +40,7 @@ public class GameManager {
 		return s;
 	}
 
-	private void saveScores() {
+	public void saveScores() {
 		try {
 			FileOutputStream fout = new FileOutputStream("./scores.ser");
 			ObjectOutputStream oos = new ObjectOutputStream(fout);

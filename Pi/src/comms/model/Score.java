@@ -1,9 +1,10 @@
 package comms.model;
 
+import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class Score {
+public class Score implements Serializable {
 
 	private AtomicInteger totalPulses;
 	private AtomicLong sumOfResponses;
@@ -32,6 +33,10 @@ public class Score {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	public long getAverageResponseTime() {

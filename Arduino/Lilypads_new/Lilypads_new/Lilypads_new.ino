@@ -181,13 +181,16 @@ void loop() {
       // Listen to back-end instructions
       if (Serial.available() > 0){
         input = Serial.read();
-        Serial.print("SimonSays game:");
-        Serial.print(input);
-        Serial.print('\n');
+      //  Serial.print("SimonSays game:");
+       // Serial.print(input);
+        //Serial.print('\n');
       if(input == 'c'){  //continue to the next round
         count++;
         len_simon = 0;
         block = true;
+        if(count < ROUND){
+        startGame();
+        }
       }else if(input == 'p' && block){  //Inputs stopped, unblock button listeners
         startGame();
         num_hit = 0;
@@ -195,6 +198,7 @@ void loop() {
         play_timer = millis();
       }else if(input == 'q'){
         Serial.print("Quit SimonSays \n");
+        lostGame();
         // Quit the game mode
         now_mode = ready_g;
         break;
@@ -232,8 +236,9 @@ void loop() {
         for (int i = 0; i <= 7; i++){
           if (switchVar1 & (1 << i) ){
             num_hit++;
-            Serial.print("Hit: ");
             Serial.print(i);
+            Serial.print(", ");
+            Serial.print(num_hit);
             Serial.print('\n');
             flipflop(i);
           }
@@ -266,6 +271,20 @@ void wonGame(){
      setSameColor(i,0x00,0x00,0x00);
    }
    loadWS2803();
+}
+
+///// lostGame Function
+void lostGame(){
+   for(int i = 0; i < nLilies; i++){
+     setSameColor(i,BRIGHT,0x00,0x00);
+   }
+   loadWS2803();
+   delay(1000);  //!!! warning: DELAY
+   for(int i = 0; i < nLilies; i++){
+     setSameColor(i,0x00,0x00,0x00);
+   }
+   loadWS2803();
+  
 }
 
 ///// startGame Function

@@ -1,9 +1,11 @@
 package controller;
 
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import view.GameFrame;
+import view.HighScoreFrame;
 
 import comms.model.GameManager;
 
@@ -21,11 +23,25 @@ public class ButtonListener implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		g.newGame(e.getActionCommand());
-		new GameFrame(g);
-		// long l = g.getMode().playGame();
-		// TODO Inpout user name
-		// g.getScoreBoard().addScoreName("Test", l);
+
+		switch (e.getActionCommand()) {
+		case "Random":
+		case "Simon Says":
+		case "SmartPhone Controlled":
+			g.newGame(e.getActionCommand());
+			new GameFrame(g);
+			break;
+		case "Save Scores":
+			System.out.println("Save Scores");
+			g.saveScores();
+			break;
+		case "High Scores":
+			System.out.println("High Scores");
+			new HighScoreFrame(g);
+			break;
+
+		}
+
 	}
 
 }

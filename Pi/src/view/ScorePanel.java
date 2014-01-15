@@ -2,6 +2,7 @@ package view;
 
 import games.GameMode;
 
+import java.awt.GridLayout;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -23,6 +24,7 @@ public class ScorePanel extends JPanel implements Observer {
 	}
 
 	private void init() {
+		this.setLayout(new GridLayout(3, 0));
 		totalHits = new JLabel("Total Hits:\t");
 		add(totalHits);
 		averageResponseTime = new JLabel("Average Response Time:\t");
@@ -38,6 +40,5 @@ public class ScorePanel extends JPanel implements Observer {
 				+ game.getScore().getAverageResponseTime());
 		totalResponseTime.setText("Total Response Time:\t"
 				+ game.getScore().getSumOfResponses());
-		// System.out.println("Score Updated");
 	}
 }

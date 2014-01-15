@@ -30,7 +30,6 @@ public class RandomMode extends GameMode {
 	}
 
 	private void nextFlash() {
-		// TODO Contunue until they miss
 		int printme = random.nextInt(noOfPads);
 		arduinoInput.sendCommand(new Data(printme));
 		System.out.println("Sent: " + printme);

@@ -1,12 +1,14 @@
 package view;
 
 import games.GameMode;
+import games.RandomMode;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import comms.model.GameManager;
@@ -51,7 +53,13 @@ public class GameFrame extends JFrame {
 		@Override
 		public void run() {
 			Score s = g.getMode().playGame();
-			g.getScoreBoard().addScoreName("Test", s);
+
+			if (g.getMode() instanceof RandomMode) {
+
+				String name = (String) JOptionPane
+						.showInputDialog("Input Your Name");
+				g.getScoreBoard().addScoreName(name, s);
+			}
 		}
 
 	}

@@ -4,6 +4,9 @@ import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 public class StartScreen extends JFrame {
@@ -13,7 +16,7 @@ public class StartScreen extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		init(al);
 		pack();
-		setSize(200, 200);
+		// setSize(200, 200);
 		setVisible(true);
 
 	}
@@ -25,6 +28,17 @@ public class StartScreen extends JFrame {
 		panel.add(new ESButton("Simon Says", al));
 		panel.add(new ESButton("SmartPhone Controlled", al));
 		add(panel);
+		JMenuBar bar = new JMenuBar();
+		JMenu menu = new JMenu("Scores");
+		bar.add(menu);
+		JMenuItem save = new JMenuItem("Save Scores");
+		save.addActionListener(al);
+		menu.add(save);
+		JMenuItem openScores = new JMenuItem("High Scores");
+		openScores.addActionListener(al);
+		menu.add(openScores);
+		setJMenuBar(bar);
+
 	}
 
 }
