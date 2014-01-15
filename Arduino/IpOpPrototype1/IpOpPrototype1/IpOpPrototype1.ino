@@ -12,7 +12,7 @@ void setup(){
 void loop() {
   
     if (Serial.available() > 0){
-        incomingByte = Serial.read();
+        incomingByte = Serial.parseInt();
         ledPinState=1;
         digitalWrite(ledPin, HIGH);
         timeCount = millis();

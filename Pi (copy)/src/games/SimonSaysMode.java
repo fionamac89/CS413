@@ -21,7 +21,6 @@ public class SimonSaysMode extends GameMode {
 
 	@Override
 	public long playGame() {
-		super.playGame();
 		startRound();
 		return score.get();
 	}

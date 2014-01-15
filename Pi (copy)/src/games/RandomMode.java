@@ -1,6 +1,7 @@
 package games;
 
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
 
 import comms.arduino.ArduinoSerialIO;
 import comms.model.Data;
@@ -13,20 +14,17 @@ public class RandomMode extends GameMode {
 	}
 
 	public long playGame() {
-		super.playGame();
-		double secondsBetweenSignals = 5;
+		score = new AtomicLong();
+		double secondsBetweenSignals = 10;
 		Random random = new Random();
 		boolean playing = true;
 		while (playing) {
 			// TODO look at ensuring that only lights that are off are used
 			// TODO Max running time
-			// TODO put minimum time so that reaction time doesn't get
-			// impossible to meet
-			int printme = random.nextInt(noOfPads);
-			arduinoInput.sendCommand(new Data(printme));
-			System.out.println("Sent: " + printme);
+			Data tmp = new Data(1);
+			arduinoInput.sendCommand(tmp);// random.nextInt(noOfPads)));
+			// System.out.println("Sent");
 			secondsBetweenSignals = secondsBetweenSignals * 0.9;
-			System.out.println("Seconds Between:\t" + secondsBetweenSignals);
 			try {
 				Thread.sleep((long) (secondsBetweenSignals * 1000));
 			} catch (InterruptedException e) {
@@ -35,4 +33,5 @@ public class RandomMode extends GameMode {
 		}
 		return score.get();
 	}
+
 }

@@ -68,17 +68,6 @@ public class ArduinoSerialIO extends Observable implements ArduinoIO {
 	}
 
 	/*
-	 * Alex added this method
-	 */
-	private char convertInt(int digit) {
-		if (digit >= 0 && digit <= 9) {
-			return (char) ('0' + digit);
-		} else {
-			return 0;
-		}
-	}
-
-	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see comms.arduino.ArduinoIO#sendCommand(comms.model.Command)
@@ -86,7 +75,8 @@ public class ArduinoSerialIO extends Observable implements ArduinoIO {
 	@Override
 	public void sendCommand(Command c) {
 		try {
-			bw.write(this.convertInt(c.getPadNo()));
+			System.out.println("Sent:\t" + c.getPadNo());
+			bw.write(1 + "/n");
 			bw.flush();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
