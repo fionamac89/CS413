@@ -51,7 +51,7 @@ public class RandomMode extends GameMode {
 			notifyObservers();
 		}
 		System.out.println(System.currentTimeMillis() - startTime);
-		if (!((System.currentTimeMillis() - startTime) > 3000l)) {
+		if (!((System.currentTimeMillis() - startTime) > 30000l)) {
 			try {
 				Thread.sleep(200);
 			} catch (InterruptedException e) {
