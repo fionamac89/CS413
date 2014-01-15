@@ -1,39 +1,70 @@
 package games;
 
+import java.util.Observable;
 import java.util.Random;
 
 import comms.arduino.ArduinoSerialIO;
 import comms.model.Data;
+import comms.model.Response;
 import comms.model.Score;
 
 public class RandomMode extends GameMode {
+	private Random random;
+
+	private long startTime;
 
 	public RandomMode(int noOfPads, ArduinoSerialIO ip) {
 		super(noOfPads, ip);
-		arduinoInput.addObserver(this);
+		// arduinoInput.addObserver(this);
+		random = new Random();
 	}
 
 	public Score playGame() {
 		super.playGame();
-		double secondsBetweenSignals = 5;
-		Random random = new Random();
-		boolean playing = true;
-		while (playing) {
-			// TODO look at ensuring that only lights that are off are used
-			// TODO Max running time
-			// TODO put minimum time so that reaction time doesn't get
-			// impossible to meet
-			int printme = random.nextInt(noOfPads);
-			arduinoInput.sendCommand(new Data(printme));
-			System.out.println("Sent: " + printme);
-			secondsBetweenSignals = secondsBetweenSignals * 0.9;
+		startTime = System.currentTimeMillis();
+		// TODO look at ensuring that only lights that are off are used
+		// TODO Max running time
+		// TODO put minimum time so that reaction time doesn't get
+		// impossible to meet
+		nextFlash();
+		return score;
+	}
+
+	private void nextFlash() {
+		// TODO Contunue until they miss
+		int printme = random.nextInt(noOfPads);
+		arduinoInput.sendCommand(new Data(printme));
+		System.out.println("Sent: " + printme);
+
+		Response currentResponse;
+
+		while (true) {
+			currentResponse = arduinoInput.getResponse();
+			if (currentResponse != null)
+				break;
+		}
+
+		score.increaseResponseTimes(currentResponse.getResponseTime());
+		score.increaseTotalPulse();
+		System.out.println("Score Changed");
+		setChanged();
+		notifyObservers();
+		if (!((System.currentTimeMillis() - startTime) > 30000l)) {
 			try {
-				Thread.sleep((long) (secondsBetweenSignals * 1000));
+				Thread.sleep(200);
 			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			nextFlash();
+		} else {
+			// TODO Send finish code
 		}
-		return score;
+
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
 	}
 
 }
