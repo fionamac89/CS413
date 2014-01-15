@@ -1,40 +1,41 @@
 //**************************************************************//
-//  Name    : shiftIn Example 1.2                               //
-//  Author  : Carlyn Maw                                        //
-//  Date    : 25 Jan, 2007                                      //
-//  Version : 1.0                                               //
-//  Notes   : Code for using a CD4021B Shift Register    	//
+//  Name    : LilyPads Control                                  //
+//  Author  : Ziaki Wen                                         //
+//  Date    : 14th, Jan. 2014                                   //
+//  Version : 1.2                                               //
+//  Notes   : Codes for switching on & off LEDs and             // 
+//          : listening to pushbuttons at the same time      	//
 //          :                                                   //
 //****************************************************************
 
-//define where your pins are
+//define where your pins are 
 const int clockPin = 7;
 const int shin_latchPin = 8;
 const int shin_dataPin = 9;
 const int shot_dataPin = 10;
-const unsigned long lasts_time = 1000UL;
 
-#define SHOT_TOTAL 9
-#define nLEDs 3
-#define DOWN HIGH
-#define UP LOW
+const unsigned long flip_time = 200UL;  //stay for 0.2 sec
+const unsigned long lasts_time = 5000UL;  //stay for 5 sec
 
-uint8_t ledBar[SHOT_TOTAL]; // Array representing LED PWM levels (byte size)
-unsigned long timer[nLEDs];  //Use for time counting
+#define nLilies 4        //Number of Lilypads
+#define SHOT_LEN 18 * nLilies  // Length of configuration array
+#define nLeds 3          // Number of leds per lilypad !!! Using the RGB led, needs 3 pins per led
+#define DOWN HIGH      // The button is pressed down
+#define UP LOW         // The button is leased
 
-//Define variables to hold the data 
-//for shift register.
-byte switchVar1 = 72;  //01001000
+uint8_t ledBar[SHOT_LEN]; // Array representing LED PWM xlevels (byte size)
+byte switchVar1 = 72;  //hold the data for shift register; 01001000 for debug
+int input = -1;  //Input from monitor; -1 for debug
 
-//define an array that corresponds to values for each 
-//of the shift register's pins
-char note2sing[] = {
-  '0', '1', '2', '3', '4', '5', '6', '7'}; 
+boolean stop_flash = true;  //To control flashing pad
+unsigned long flash_timers[nLilies];  //timers to control the flashing
 
+unsigned long lasts_timers[nLilies];  //How long should the lilypad keeps lighting
+unsigned long react_timers[nLilies];  //Use for calculating reaction time
 
 void setup() {
   //start serial
-  Serial.begin(9600);
+  Serial.begin(115200);
 
   //define pin modes
   pinMode(shin_latchPin, OUTPUT);
@@ -42,94 +43,210 @@ void setup() {
   pinMode(shot_dataPin, OUTPUT); 
   pinMode(shin_dataPin, INPUT);
 
-  // Initialize WS2803 - Clock needs to be low at least 600us to prepare itself.
-  digitalWrite(clockPin, LOW);  //??? Does it affect shiftin
-  delayMicroseconds(600);  //!!! Using delay
-
-   // Initialize the ledBar array - 23% Brightness
-   for(int i = 0; i < nLEDs; i++){
-      ledBar[i] = 0x30;
-    }
-    for(int i = nLEDs; i < SHOT_TOTAL; i++){
-      ledBar[i] = 0x00;
-    }
-    loadWS2803();  
-  
-  //Initialize timer
-  for(int i = 0; i < nLEDs; i++){
-    timer[i] = millis() -  lasts_time;
+  //Initialize timers
+  for(int i = 0; i < nLilies; i++){
+    react_timers[i] = millis();
+    flash_timers[i] = millis();
+    lasts_timers[i] = millis();
   }
+
+  // Initialize WS2803 - Clock needs to be low at least 600us to prepare itself.
+  digitalWrite(clockPin, LOW);
+  delayMicroseconds(600);
+  
+  // set the light to twinkle
+  stop_flash = false;
+  
 }
 
 void loop() {
-   // Initialize the ledBar array - 23% Brightness
-  //Pulse the latch pin:
-  //set it to 1 to collect parallel data
-  digitalWrite(shin_latchPin,1);
-  //set it to 1 to collect parallel data, wait
-  delayMicroseconds(20);
+  if(!stop_flash){
+     if (Serial.available() > 0){
+        input = Serial.read();
+        Serial.print("Not in game:");
+        Serial.print(input);
+        Serial.print('\n');
+      if(input == '1'){
+        stop_flash = true;
+        for(int i = 0; i < nLilies; i++){
+          setSameColor(i,0x00,0x00,0x00);
+        }
+      }
+    }
+    for(int i = 0; i < nLilies; i++){
+      setPadFlash(i);
+    }
+    loadWS2803();
+  }
   
-  //set it to 0 to transmit data serially  
-  digitalWrite(shin_latchPin,0);
-
-  //collect each shift register into a byte
-  switchVar1 = shiftIn(shin_dataPin, clockPin);
-
-  //This for-loop steps through the byte
-  //bit by bit which holds the shift register data 
-  //and if it was high (1) then it prints
-  //the corresponding location in the array
-  for (int n=0; n<=7; n++)
-  {
-    if (switchVar1 & (1 << n) ){
-      if(note2sing[n] == '0' && ledBar[0] != 0x00){
-        //Reset time counting
-        timer[0] = millis();
-        //Do sth to the No.0 led
-        ledBar[0] = 0x00;  //Turn if OFF
+  if(stop_flash){
+      if (Serial.available() > 0){
+        input = Serial.read();
+        Serial.print("In the game:");
+        Serial.print(input);
+        Serial.print('\n');
+      if(input >= '0' && input <= '4'){
+        input = input - '0';
+        setDiffColor(input,0x30,0x30,0x30);
+        lasts_timers[input] = react_timers[input] = millis();
         loadWS2803();
+      }else if(input == 'q'){
+        // Quit the game mode
+        stop_flash = false;
       }
-      if(note2sing[n] == '1'){
-        timer[1] = millis();
-        //DO sth to the No.1 led
-        ledBar[1] = 0x00;
-        loadWS2803();        
-      }
-      if(note2sing[n] == '2'){
-        timer[2] = millis();
-        //DO sth to the No.1 led
-        ledBar[2] = 0x00;
-        loadWS2803();        
-      }
-      Serial.println(note2sing[n]);
     }
-  }
+    //Check if Lilypads are expired
+    for(int i = 0; i < nLilies; i++){
+      if(isLightOn(i) && millis() - lasts_timers[i] > lasts_time){
+        setSameColor(i,0x00,0x00,0x00);  //Turn it off
+      }
+    }
+    //Pulse the latch pin:
+    //set it to 1 to collect parallel data
+    digitalWrite(shin_latchPin,1);
+    //set it to 1 to collect parallel data, wait
+    delayMicroseconds(20);
   
-  for(int i = 0; i < nLEDs; i++){
-    if(millis() - timer[i] <  lasts_time){
-      //  button was triggered within lasts_time
-     }else{
-       ledBar[i] = 0x30;  //Relight it.
+    //set it to 0 to transmit data serially  
+    digitalWrite(shin_latchPin,0);
+
+    //collect each shift register into a byte
+    switchVar1 = shiftIn(shin_dataPin, clockPin);
+
+    //This for-loop steps through the byte
+    //bit by bit which holds the shift register data 
+    //and if it was high (1) then it prints
+    //the corresponding location in the array
+    for (int i = 0; i <= 7; i++){
+      if (switchVar1 & (1 << i) ){
+          if(isLightOn(i)){
+            //Do sth to the No.i led
+            Serial.print(i);
+            Serial.print(", ");
+            Serial.print(millis() - react_timers[i]);
+            Serial.print("\n");
+            setSameColor(i,0x00,0x00,0x00);
+         }
+      }
     }
+    loadWS2803();
+  
   }
-  loadWS2803();        
 
 }
 
 //------------------------------------------------end main loop
 
+//----------------------------------- Specialized LED functions
+///// Assume that each lilypad has three rgb leds, also when one light on the pad is on then all are on.
+///// isLightOn Function
+boolean isLightOn(int pos_pad){
+  return getRGBRed(pos_pad,0) != 0x00 || getRGBGreen(pos_pad,0) != 0x00 || getRGBBlue(pos_pad,0) != 0x00;
+}
+
+///// setPadFlash Function
+///// set the corresponding pad to twinkle
+///// depends on a global boolean: STOPFLASH;
+void setPadFlash(int pos_pad){
+  if(pos_pad < nLilies && stop_flash == false){
+    if(millis() - flash_timers[pos_pad] > flip_time){
+      if(isLightOn(pos_pad)){
+        // the pad is on, switch it off
+        setSameColor(pos_pad,0x00, 0x00, 0x00);
+      }else{
+        setSameColor(pos_pad, 0x20, 0x30, 0x30);
+      }
+      flash_timers[pos_pad] = millis();
+    }
+  }
+}
+
+///// setSameColor Function
+///// Lit all leds on the same pad with same coour scheme
+///// Parameters only to control the brightness
+void setSameColor(int pos_pad, byte red, byte green, byte blue){
+  if(pos_pad < nLilies){
+    for(int i = 0; i < nLeds; i++){
+      setRGBLed(pos_pad,i,red,green,blue);
+    }
+  }else{
+    for(int i = 0; i < nLeds; i++){
+      Serial.println("Error: out of boundary @ setDiffColor.");
+      setRGBLed(pos_pad,i,0x00,0x00,0x00);      
+    } 
+  }
+}
+
+///// setDiffColor Function
+///// Light 1st with red, 2nd with green and the last with blue colours
+///// Parameters only to control the brightness
+void setDiffColor(int pos_pad, byte red, byte green, byte blue){
+  if(pos_pad < nLilies){
+    setRGBLed(pos_pad,0,red,0x00,0x00);
+    setRGBLed(pos_pad,1,0x00,green,0x00);
+    setRGBLed(pos_pad,2,0x00,0x00,blue);
+  }else{
+    for(int i = 0; i < nLeds; i++){
+      Serial.println("Error: out of boundary @ setDiffColor.");
+      setRGBLed(pos_pad,i,0x00,0x00,0x00);      
+    } 
+  }  
+}
+
+//----------------------------------- general LED functions
+///// Return LED colour information
+byte getRGBRed(int pos_pad, int pos_led){
+  if(pos_pad >= nLilies && pos_led >= nLeds){
+    Serial.println("Error: out of boundary @ getRGBRed.");
+    return 0x00;
+  }
+  return ledBar[pos_pad * 18 + pos_led * 3];
+}
+
+byte getRGBGreen(int pos_pad, int pos_led){
+  if(pos_pad >= nLilies && pos_led >= nLeds){
+    Serial.println("Error: out of boundary @ getRGBGreen.");
+    return 0x00;
+  }
+  return ledBar[pos_pad * 18 + pos_led * 3 + 1];
+}
+
+byte getRGBBlue(int pos_pad, int pos_led){
+  if(pos_pad >= nLilies && pos_led >= nLeds){
+    Serial.println("Error: out of boundary @ getRGBBlue.");
+    return 0x00;
+  }
+  return ledBar[pos_pad * 18 + pos_led * 3 + 2];
+}
+
+///// setRGBLed function
+///// Set the Colour & Brightness of an RGB led
+///// !!! It depends to ledBar[] array
+void setRGBLed(int pos_pad, int pos_led, byte red, byte green, byte blue){
+  if(pos_pad < nLilies && pos_led < nLeds){
+    int pos_bar = pos_pad * 18 + pos_led * 3;
+    ledBar[pos_bar++] = red;
+    ledBar[pos_bar++] = green;
+    ledBar[pos_bar++] = blue;  
+  }else{
+    Serial.println("Error: out of boundary @ setRGBLed.");
+  }
+}
+
+////// ----------------------------------------load shiftout function
+///// By calling this function, you can override the shiftout with 
+///// the latest digits in ledBar
 void loadWS2803(){
-    for (int wsOut = 0; wsOut < SHOT_TOTAL; wsOut++){
+    for (int wsOut = 0; wsOut < SHOT_LEN; wsOut++){
       shiftOut(shot_dataPin, clockPin, MSBFIRST, ledBar[wsOut]);
     }
-    delayMicroseconds(600); // 600us needed to reset WS2803s !!! Using delay
+    delayMicroseconds(600);
 }
 
 ////// ----------------------------------------shiftIn function
 ///// just needs the location of the data pin and the clock pin
 ///// it returns a byte with each bit in the byte corresponding
 ///// to a pin on the shift register. leftBit 7 = Pin 7 / Bit 0= Pin 0
-
 byte shiftIn(int myDataPin, int myClockPin) { 
   int i;
   int temp = 0;
