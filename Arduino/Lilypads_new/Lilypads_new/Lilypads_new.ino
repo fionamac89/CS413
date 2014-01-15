@@ -134,6 +134,10 @@ void loop() {
     //Check if Lilypads are expired
     for(int i = 0; i < nLilies; i++){
       if(isLightOn(i) && millis() - lasts_timers[i] > lasts_time){
+        Serial.print(i);
+        Serial.print(", ");
+        Serial.print(millis() - react_timers[i]);
+        Serial.print("\n");
         setSameColor(i,0x00,0x00,0x00);  //Turn it off
       }
     }
