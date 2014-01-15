@@ -22,7 +22,7 @@ const unsigned long lasts_time = 5000UL;  //stay for 5 sec
 #define nLeds 3          // Number of leds per lilypad !!! Using the RGB led, needs 3 pins per led
 #define DOWN HIGH      // The button is pressed down
 #define UP LOW         // The button is leased
-
+#define BRIGHT 0x05
 uint8_t ledBar[SHOT_LEN]; // Array representing LED PWM xlevels (byte size)
 byte switchVar1 = 72;  //hold the data for shift register; 01001000 for debug
 int input = -1;  //Input from monitor; -1 for debug
@@ -87,7 +87,7 @@ void loop() {
         Serial.print('\n');
       if(input >= '0' && input <= '4'){
         input = input - '0';
-        setDiffColor(input,0x30,0x30,0x30);
+        setDiffColor(input,BRIGHT,BRIGHT,BRIGHT);
         lasts_timers[input] = react_timers[input] = millis();
         loadWS2803();
       }else if(input == 'q'){
@@ -154,7 +154,7 @@ void setPadFlash(int pos_pad){
         // the pad is on, switch it off
         setSameColor(pos_pad,0x00, 0x00, 0x00);
       }else{
-        setSameColor(pos_pad, 0x20, 0x30, 0x30);
+        setSameColor(pos_pad, BRIGHT,BRIGHT, BRIGHT);
       }
       flash_timers[pos_pad] = millis();
     }

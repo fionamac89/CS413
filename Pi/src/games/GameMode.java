@@ -1,31 +1,52 @@
 package games;
 
 import java.util.Observable;
-import java.util.concurrent.atomic.AtomicLong;
 
 import comms.arduino.ArduinoSerialIO;
 import comms.model.Response;
+import comms.model.Score;
 
-public abstract class GameMode implements Game {
+public abstract class GameMode extends Observable implements Game {
 
 	protected int noOfPads;
 	protected ArduinoSerialIO arduinoInput;
-	protected AtomicLong score;
+	protected Score score;
 
 	public GameMode(int noOfPads, ArduinoSerialIO arduinoInput) {
 		this.noOfPads = noOfPads;
 		this.arduinoInput = arduinoInput;
-		this.score = new AtomicLong();
+		this.score = new Score();
 		arduinoInput.addObserver(this);
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
 		Response currentResponse;
+		// System.out.println("Response Reterived");
 		if ((currentResponse = arduinoInput.getResponse()) != null) {
-			// System.out.println(currentResponse.toString());
-			// System.out.println("Score:\t"+
-			score.addAndGet(currentResponse.getResponseTime());
+			score.increaseResponseTimes(currentResponse.getResponseTime());
+			score.increaseTotalPulse();
+			System.out.println("Score Changed");
+			setChanged();
+			notifyObservers();
 		}
 	}
+
+	@Override
+	public Score playGame() {
+		score = new Score();
+		// Sending null to init the socket
+		arduinoInput.init();
+		try {
+			Thread.sleep((long) (1000));
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public Score getScore() {
+		return score;
+	}
+
 }

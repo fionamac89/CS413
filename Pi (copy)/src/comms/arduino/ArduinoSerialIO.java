@@ -60,18 +60,10 @@ public class ArduinoSerialIO extends Observable implements ArduinoIO {
 				out = serialPort.getOutputStream();
 				bw = new BufferedWriter(new OutputStreamWriter(out));
 				new Thread(new SerialReader(in)).start();
+				// serialPort.addEventListener(new
+				// SerialReaderEventListener(in));
+				// serialPort.notifyOnDataAvailable(true);
 			}
-		}
-	}
-
-	/*
-	 * Alex added this method
-	 */
-	private char convertInt(int digit) {
-		if (digit >= 0 && digit <= 9) {
-			return (char) ('0' + digit);
-		} else {
-			return 0;
 		}
 	}
 
@@ -83,22 +75,11 @@ public class ArduinoSerialIO extends Observable implements ArduinoIO {
 	@Override
 	public void sendCommand(Command c) {
 		try {
-			bw.write(this.convertInt(c.getPadNo()));
+			System.out.println("Sent:\t" + c.getPadNo());
+			bw.write(1 + "/n");
 			bw.flush();
 		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void sendConfig() {
-
-	}
-
-	public void init() {
-		try {
-			bw.write('1');
-			bw.flush();
-		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -113,6 +94,8 @@ public class ArduinoSerialIO extends Observable implements ArduinoIO {
 		return inputBuffer.poll();
 	}
 
+	// FIXME This is used to simulate the input from the arduino this will be
+	// changed once hardware prototype is completed.
 	private class SerialReader extends Thread {
 
 		InputStream in;
@@ -130,7 +113,7 @@ public class ArduinoSerialIO extends Observable implements ArduinoIO {
 						c = (char) in.read();
 						s += c;
 					}
-					System.out.println("Signal Recived:\t" + s);
+					System.out.println(s);
 					if (s.length() > 0 && s.contains(", ")) {
 						String[] data = s.replace("\n", "").split(", ");
 						inputBuffer.add(new Data(Integer.parseInt(data[0]),

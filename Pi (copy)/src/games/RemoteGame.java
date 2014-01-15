@@ -9,7 +9,6 @@ import java.net.Socket;
 
 import comms.arduino.ArduinoSerialIO;
 import comms.model.Data;
-import comms.model.Score;
 
 public class RemoteGame extends GameMode {
 
@@ -18,11 +17,13 @@ public class RemoteGame extends GameMode {
 	}
 
 	@Override
-	public Score playGame() {
+	public long playGame() {
 
 		try {
 			ServerSocket serverSocket = new ServerSocket(4444);
 			System.out.println("Waiting");
+			// TODO Remove next line
+			// new Thread(new ClientRunnable()).start();
 			Socket clientSocket = serverSocket.accept();
 			System.out.println("Client Found");
 			PrintWriter out = new PrintWriter(clientSocket.getOutputStream(),
@@ -43,7 +44,7 @@ public class RemoteGame extends GameMode {
 			e.printStackTrace();
 		}
 
-		return score;
+		return 0;
 	}
 
 }
