@@ -26,7 +26,7 @@ public class StartScreen extends JFrame {
 		panel.setLayout(new GridLayout(2, 0));
 		panel.add(new ESButton("Random", al));
 		panel.add(new ESButton("Simon Says", al));
-		// panel.add(new ESButton("SmartPhone Controlled", al));
+		panel.add(new ESButton("Challange Mode", al));
 		add(panel);
 		JMenuBar bar = new JMenuBar();
 		JMenu menu = new JMenu("Scores");

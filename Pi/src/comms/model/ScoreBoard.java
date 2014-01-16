@@ -40,7 +40,7 @@ public class ScoreBoard implements Serializable {
 
 		@Override
 		public int compare(Score o1, Score o2) {
-			if (o1.getAverageResponseTime() < o2.getAverageResponseTime()) {
+			if (o1.getAverageResponseTime() > o2.getAverageResponseTime()) {
 				return 1;
 			}
 			return -1;
