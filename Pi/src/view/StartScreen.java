@@ -16,17 +16,17 @@ public class StartScreen extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		init(al);
 		pack();
-		// setSize(200, 200);
+		setSize(200, 200);
 		setVisible(true);
 
 	}
 
 	private void init(ActionListener al) {
 		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(3, 1));
+		panel.setLayout(new GridLayout(2, 0));
 		panel.add(new ESButton("Random", al));
 		panel.add(new ESButton("Simon Says", al));
-		panel.add(new ESButton("SmartPhone Controlled", al));
+		// panel.add(new ESButton("SmartPhone Controlled", al));
 		add(panel);
 		JMenuBar bar = new JMenuBar();
 		JMenu menu = new JMenu("Scores");
