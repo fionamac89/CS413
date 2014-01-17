@@ -1,4 +1,4 @@
-package comms.model;
+package model;
 
 import games.Game;
 import games.RandomMode;

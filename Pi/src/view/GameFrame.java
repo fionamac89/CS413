@@ -11,8 +11,9 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import comms.model.GameManager;
-import comms.model.Score;
+import model.GameManager;
+import model.Score;
+
 
 public class GameFrame extends JFrame {
 

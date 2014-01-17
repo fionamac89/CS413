@@ -7,9 +7,10 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import model.Data;
+import model.Score;
+
 import comms.arduino.ArduinoSerialIO;
-import comms.model.Data;
-import comms.model.Score;
 
 public class RemoteGame extends GameMode {
 

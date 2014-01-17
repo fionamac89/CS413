@@ -1,4 +1,4 @@
-package comms.model;
+package model;
 
 public interface Command {
 

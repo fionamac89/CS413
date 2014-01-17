@@ -17,12 +17,12 @@ import java.util.Queue;
 import java.util.TooManyListenersException;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import comms.model.Command;
-import comms.model.Config;
-import comms.model.Data;
-import comms.model.Response;
+import model.Command;
+import model.Config;
+import model.Data;
+import model.Response;
 
-public class ArduinoSerialIO extends Observable implements ArduinoIO {
+public class ArduinoSerialIO extends Observable {
 
 	private InputStream in;
 	private BufferedWriter bw;
@@ -76,12 +76,6 @@ public class ArduinoSerialIO extends Observable implements ArduinoIO {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see comms.arduino.ArduinoIO#sendCommand(comms.model.Command)
-	 */
-	@Override
 	public void sendCommand(Command c) {
 		try {
 			bw.write(this.convertInt(c.getPadNo()));
@@ -112,12 +106,6 @@ public class ArduinoSerialIO extends Observable implements ArduinoIO {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see comms.arduino.ArduinoIO#getResponse()
-	 */
-	@Override
 	public Response getResponse() {
 		return inputBuffer.poll();
 	}

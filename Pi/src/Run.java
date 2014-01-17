@@ -1,6 +1,6 @@
+import model.GameManager;
 import view.StartScreen;
 
-import comms.model.GameManager;
 
 import controller.ButtonListener;
 

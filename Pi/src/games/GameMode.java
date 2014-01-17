@@ -2,9 +2,10 @@ package games;
 
 import java.util.Observable;
 
+import model.Response;
+import model.Score;
+
 import comms.arduino.ArduinoSerialIO;
-import comms.model.Response;
-import comms.model.Score;
 
 public abstract class GameMode extends Observable implements Game {
 

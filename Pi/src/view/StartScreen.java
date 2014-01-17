@@ -26,7 +26,7 @@ public class StartScreen extends JFrame {
 		panel.setLayout(new GridLayout(2, 0));
 		panel.add(new ESButton("Random", al));
 		panel.add(new ESButton("Simon Says", al));
-		panel.add(new ESButton("Challange Mode", al));
+		// panel.add(new ESButton("Challange Mode", al));
 		add(panel);
 		JMenuBar bar = new JMenuBar();
 		JMenu menu = new JMenu("Scores");
@@ -37,8 +37,7 @@ public class StartScreen extends JFrame {
 		JMenuItem openScores = new JMenuItem("High Scores");
 		openScores.addActionListener(al);
 		menu.add(openScores);
-		setJMenuBar(bar);
+		setJMenuBar(bar);q
 
 	}
-
 }

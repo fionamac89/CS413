@@ -3,11 +3,12 @@ package games;
 import java.util.Observable;
 import java.util.Random;
 
+import model.Config;
+import model.Data;
+import model.Response;
+import model.Score;
+
 import comms.arduino.ArduinoSerialIO;
-import comms.model.Config;
-import comms.model.Data;
-import comms.model.Response;
-import comms.model.Score;
 
 public class RandomMode extends GameMode {
 	private Random random;

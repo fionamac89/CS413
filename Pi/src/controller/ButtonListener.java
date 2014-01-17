@@ -4,10 +4,11 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import model.GameManager;
+
 import view.GameFrame;
 import view.HighScoreFrame;
 
-import comms.model.GameManager;
 
 public class ButtonListener implements ActionListener {
 

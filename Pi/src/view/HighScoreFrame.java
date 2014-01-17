@@ -4,7 +4,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import comms.model.GameManager;
+import model.GameManager;
+
 
 public class HighScoreFrame extends JFrame {
 
